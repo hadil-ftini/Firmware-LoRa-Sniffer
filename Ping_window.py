@@ -4,8 +4,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QHBoxLay
 from PyQt5.QtCore import Qt
 from SX127x.LoRa import *
 from SX127x.board_config import BOARD
-BOARD.setup()
-BOARD.reset()
+
 POLYNOMIAL = 0x07
 #un algorithme de calcul de CRC: Le CRC est une méthode utilisée pour détecter les erreurs dans les données numériques.
 def calculate_crc8(data):
@@ -58,7 +57,7 @@ class MyLoRa(LoRa):
         self.clear_irq_flags(RxDone=1)
         self.set_mode(MODE.SLEEP)
         self.set_mode(MODE.RXCONT)
-        self.reset_ptr_rx()
+        
 class PingTestWindow(QWidget):
     
     def __init__(self):
@@ -76,6 +75,7 @@ class PingTestWindow(QWidget):
         BOARD.setup()
         BOARD.reset()
         lora = LoRa()
+        self.reset_ptr_rx()
         lora.set_pa_config(pa_select=1, max_power=21, output_power=17)
         lora.set_bw(BW.BW125)
         lora.set_coding_rate(CODING_RATE.CR4_7)
