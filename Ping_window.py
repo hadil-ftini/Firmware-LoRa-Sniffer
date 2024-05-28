@@ -15,10 +15,10 @@ def start(self):
                 time.sleep(3) # there must be a better solution but sleep() works
                 self.reset_ptr_rx()
                 self.set_mode(MODE.RXCONT) # Receiver mode
-            self.var=0
-            self.reset_ptr_rx()
-            self.set_mode(MODE.RXCONT) # Receiver mode
-            time.sleep(10)
+                self.var=0
+                self.reset_ptr_rx()
+                self.set_mode(MODE.RXCONT) # Receiver mode
+                time.sleep(10)
 #un algorithme de calcul de CRC: Le CRC est une méthode utilisée pour détecter les erreurs dans les données numériques.
 def calculate_crc8(data):
     crc = 0x00
@@ -88,7 +88,6 @@ class PingTestWindow(QWidget):
         BOARD.setup()
         BOARD.reset()
         lora = LoRa()
-        self.reset_ptr_rx()
         lora.set_pa_config(pa_select=1, max_power=21, output_power=17)
         lora.set_bw(BW.BW125)
         lora.set_coding_rate(CODING_RATE.CR4_7)
