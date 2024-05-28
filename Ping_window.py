@@ -6,6 +6,19 @@ from SX127x.LoRa import *
 from SX127x.board_config import BOARD
 
 POLYNOMIAL = 0x07
+def start(self):          
+        while True:
+            while (self.var==0):
+                print ("Send: INF")
+                self.write_payload([255, 255, 0, 0, 73, 78, 70, 0]) # Send INF
+                self.set_mode(MODE.TX)
+                time.sleep(3) # there must be a better solution but sleep() works
+                self.reset_ptr_rx()
+                self.set_mode(MODE.RXCONT) # Receiver mode
+            self.var=0
+            self.reset_ptr_rx()
+            self.set_mode(MODE.RXCONT) # Receiver mode
+            time.sleep(10)
 #un algorithme de calcul de CRC: Le CRC est une méthode utilisée pour détecter les erreurs dans les données numériques.
 def calculate_crc8(data):
     crc = 0x00
