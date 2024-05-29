@@ -1,7 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QGridLayout
 from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtGui import QTransform,QPixmap
-from PyQt5.QtGui import QFont, QPixmap
+from PyQt5.QtGui import QTransform, QPixmap, QFont
 
 class TestInterface(QWidget):
     switch_ping_pong_window = pyqtSignal()
@@ -10,21 +9,21 @@ class TestInterface(QWidget):
 
     def __init__(self, previous_window):
         super().__init__()
+
+        self.setWindowTitle("Setting Test Interface")
+        self.setGeometry(100, 100, 400, 300)
+        # Adjusting geometry for a 2.8 inch screen
+        self.setGeometry(0, 0, 800, 480)
+        
+        # Logo
+        self.logo_label = QLabel(self)
+        pixmap = QPixmap('enterprise_logo.png')
+        
+        # Rotate the pixmap 180 degrees
         transform = QTransform().rotate(180)
         rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
         self.logo_label.setPixmap(rotated_pixmap)
         self.logo_label.setFixedSize(rotated_pixmap.size())
-        self.setWindowTitle("Setting Test Interface")
-        self.setGeometry(100, 100, 400, 300)
-
-        # Adjusting geometry for a 2.8 inch screen
-        self.setGeometry(0, 0, 800, 480)
-        
-
-        # Logo
-        self.logo_label = QLabel(self)
-        pixmap = QPixmap('enterprise_logo.png')
-        self.logo_label.setPixmap(pixmap)
 
         # Title Label
         self.title_label = QLabel("Setting Interface", self)
@@ -40,8 +39,6 @@ class TestInterface(QWidget):
 
         self.button3 = QPushButton("Generale", self)
         self.button3.clicked.connect(self.open_general_window)
-
-
 
         # Layout
         layout = QVBoxLayout()
@@ -65,5 +62,3 @@ class TestInterface(QWidget):
 
     def open_general_window(self):
         self.switch_general_window.emit()
-    
-        
