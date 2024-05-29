@@ -1,7 +1,8 @@
 import sys
-from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QMessageBox, QLabel, QHBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QMessageBox, QLabel, QHBoxLayout
 from PyQt5.QtGui import QPixmap, QTransform
-from lora_window import LoraValWindow 
+from lora_window import LoraValWindow
+
 class GeneralWindow(QWidget):
     def __init__(self, previous_window):
         super().__init__()
@@ -10,29 +11,29 @@ class GeneralWindow(QWidget):
 
         # Adjusting geometry for a 2.8 inch screen
         self.setGeometry(0, 0, 800, 480)
+
+        # Logo
+        self.logo_label = QLabel(self)
+        self.logo_label.setGeometry(52, 10, 120, 120)
+        
+        # Load the pixmap
+        pixmap = QPixmap('enterprise_logo.png')
+        
         # Rotate the pixmap 90 degrees
         transform = QTransform().rotate(90)
         rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
         self.logo_label.setPixmap(rotated_pixmap)
         self.logo_label.setFixedSize(rotated_pixmap.size())
 
-        # Logo
-        self.logo_label = QLabel(self)
-        self.logo_label.setGeometry(52, 10, 120, 120)
-        pixmap = QPixmap('enterprise_logo.png')
-        self.logo_label.setPixmap(pixmap)
-
         # Return button
         self.return_button = QPushButton("Return", self)
         self.return_button.clicked.connect(self.return_to_previous)
-
 
         self.reset_button = QPushButton("Reset", self)
         self.reset_button.clicked.connect(self.reset_parameters)
 
         # Layout for buttons below logo
         button_layout = QHBoxLayout()
-        
         button_layout.addWidget(self.reset_button)
 
         # Main layout
@@ -43,6 +44,7 @@ class GeneralWindow(QWidget):
         self.setLayout(main_layout)
 
         self.previous_window = previous_window
+
     def reset_parameters(self):
         # Implement resetting parameters logic here
         print("Parameters reset")
@@ -51,6 +53,7 @@ class GeneralWindow(QWidget):
     def return_to_previous(self):
         self.hide()
         self.previous_window.show()
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     lora_window = LoraValWindow()
