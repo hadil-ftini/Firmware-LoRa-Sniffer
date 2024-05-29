@@ -1,83 +1,125 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QMessageBox, QLabel, QHBoxLayout
-from PyQt5.QtGui import QPixmap, QTransform
-from PyQt5.QtCore import Qt, QRect
-from lora_window import LoraValWindow
-
-class GeneralWindow(QWidget):
-     
-    def __init__(self, previous_window):
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QPushButton, QMainWindow, QComboBox, QMessageBox
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap,QTransform
+from SX127x.LoRa import *
+from SX127x.board_config import BOARD
+class LoraValWindow(QMainWindow):
+    def __init__(self, previous_window=None):
         super().__init__()
+        transform = QTransform().rotate(90)
+        rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
+        self.logo_label.setPixmap(rotated_pixmap)
+        self.logo_label.setFixedSize(rotated_pixmap.size())
+        self.setWindowTitle("LoRa Setup")
+        self.previous_window = previous_window
+        self.setup_ui()
+
+    def setup_ui(self):
+        self.central_widget = QWidget()
+        self.setCentralWidget(self.central_widget)
+
+        self.layout = QVBoxLayout(self.central_widget)
+        self.logo_label = QLabel(self)
+        self.logo_label.setGeometry(52, 40, 120, 120)
+        pixmap = QPixmap('enterprise_logo.png')  
+        self.logo_label.setPixmap(pixmap)
+        self.layout.addWidget(self.logo_label)
+        self.setGeometry(0, 0, 800, 480)
+        # Rotate the pixmap 90 degrees
         transform = QTransform().rotate(180)
         rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
         self.logo_label.setPixmap(rotated_pixmap)
         self.logo_label.setFixedSize(rotated_pixmap.size())
-        self.setWindowTitle("General Window")
-        self.setGeometry(0, 0, 800, 480)  # Adjusting geometry for a 2.8 inch screen
 
-        # Logo
-        self.logo_label = QLabel(self)
-        pixmap = QPixmap('enterprise_logo.png')
-        
-        # Rotate the pixmap 180 degrees
-       
 
-        # Return button
+        # QLabel for Frequency
+        self.freq_label = QLabel("Frequency (MHz):", self)
+        self.layout.addWidget(self.freq_label)
+
+        # QComboBox for Frequency
+        self.freq_input = QComboBox(self)
+        self.freq_input.addItems(["434", "869" ,"915"])
+        self.layout.addWidget(self.freq_input)
+
+        # QComboBox for Bandwidth
+        self.bw_label = QLabel("Bandwidth:", self)
+        self.bw_input = QComboBox(self)
+        self.bw_input.addItems(["1", "2", "3", "4"])
+        self.layout.addWidget(self.bw_label)
+        self.layout.addWidget(self.bw_input)
+
+        # QComboBox for Spreading Factor
+        self.sf_label = QLabel("Spreading Factor:", self)
+        self.sf_input = QComboBox(self)
+        self.sf_input.addItems(["7", "8", "9", "10", "11", "12"])
+        self.layout.addWidget(self.sf_label)
+        self.layout.addWidget(self.sf_input)
+
+        # QComboBox for Coding Rate
+        self.cr_label = QLabel("Coding Rate:", self)
+        self.cr_input = QComboBox(self)
+        self.cr_input.addItems(["1", "2", "3", "4", "5"])
+        self.layout.addWidget(self.cr_label)
+        self.layout.addWidget(self.cr_input)
+
+        self.setup_lora_button = QPushButton("Set LoRa")
+        self.setup_lora_button.clicked.connect(self.setup_lora)
+        self.layout.addWidget(self.setup_lora_button)
+
+        # Return Button
         self.return_button = QPushButton("Return", self)
         self.return_button.clicked.connect(self.return_to_previous)
+        self.layout.addWidget(self.return_button)
 
-        self.reset_button = QPushButton("Reset", self)
-        self.reset_button.clicked.connect(self.reset_parameters)
+        # Save Button
+        self.save_button = QPushButton("Save", self)
+        self.save_button.clicked.connect(self.save_parameters)
+        self.layout.addWidget(self.save_button)
 
-        # Layout for buttons below logo
-        button_layout = QHBoxLayout()
-        button_layout.addWidget(self.reset_button)
+    def setup_lora(self):
+        freq = int(self.freq_input.currentText())
+        bw_index = self.bw_input.currentIndex()  # Get the index of the selected item
+        bw_values = [1, 2, 3, 4]  # Corresponding values for the bandwidth options
+        bw = bw_values[bw_index]  # Retrieve the value based on the index
+        sf = int(self.sf_input.currentText())  # Get the currently selected spreading factor
+        cr = int(self.cr_input.currentText())  # Get the currently selected coding rate
+        
+        BOARD.setup()
+        lora = LoRa()
+        lora.set_mode(MODE.STDBY)
+        lora.set_freq(freq)
+        lora.set_modem_config_1(bw=bw, coding_rate=cr)
+        lora.set_modem_config_2(spreading_factor=sf)
+        BOARD.teardown()
 
-        # Main layout
-        main_layout = QVBoxLayout()
-        main_layout.addWidget(self.return_button)  # Add return button at the top
-        main_layout.addWidget(self.logo_label)  # Add logo label
-        main_layout.addLayout(button_layout)  # Add buttons layout below logo
-        self.setLayout(main_layout)
+    def save_parameters(self):
+        freq = self.freq_input.currentText()
+        bw = self.bw_input.currentText()  # Get the currently selected bandwidth
+        sf = self.sf_input.currentText()  # Get the currently selected spreading factor
+        cr = self.cr_input.currentText()  # Get the currently selected coding rate
 
-        self.previous_window = previous_window
+        parameters_string = f"Frequency: {freq}\nBandwidth: {bw}\nSpreading Factor: {sf}\nCoding Rate: {cr}\n"
 
-        # Rotate interface after setting up the layout
-        self.rotate_interface()
+        with open("lora_val.ini", "w") as f:
+            f.write(parameters_string)
 
-    def rotate_interface(self):
-        # Get the current geometry
-        rect = self.geometry()
-
-        # Create a new geometry with rotated dimensions
-        new_rect = QRect(rect.x(), rect.y(), rect.width(), rect.height())
-        self.setGeometry(new_rect)
-
-        # Rotate and reposition the widgets
-        for widget in self.findChildren(QWidget):
-            widget_rect = widget.geometry()
-            new_x = rect.width() - widget_rect.x() - widget_rect.width()
-            new_y = rect.height() - widget_rect.y() - widget_rect.height()
-            new_widget_rect = QRect(new_x, new_y, widget_rect.width(), widget_rect.height())
-            widget.setGeometry(new_widget_rect)
-
-        # Adjust main layout to the new geometry
-        self.setLayout(self.layout())
-
-    def reset_parameters(self):
-        # Implement resetting parameters logic here
-        print("Parameters reset")
-        QMessageBox.information(self, "Reset", "Settings reset to default.")
+        QMessageBox.information(self, "Saved", "Parameters saved to lora_val.ini")
 
     def return_to_previous(self):
-        self.hide()
-        self.previous_window.show()
+        if self.previous_window:
+            self.hide()
+            self.previous_window.show()
 
-        
+    def reset_parameters(self):
+        # Resetting parameters to default values
+        self.freq_input.setCurrentIndex(0)
+        self.bw_input.setCurrentIndex(0)
+        self.sf_input.setCurrentIndex(0)
+        self.cr_input.setCurrentIndex(0)
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    lora_window = LoraValWindow()
-    general_window = GeneralWindow(lora_window)
-    lora_window.general_window = general_window  # Pass reference to GeneralWindow to LoraValWindow
-    general_window.show()
+    window = LoraValWindow()
+    window.show()
     sys.exit(app.exec_())
