@@ -175,7 +175,7 @@ class PingTestWindow(QWidget):
         main_layout.addWidget(self.elapsed_time_label)
         main_layout.addWidget(ping_button)
         main_layout.addWidget(save_button)
-        transform = QTransform().rotate(90)
+        transform = QTransform().rotate(180)
         rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
         self.logo_label.setPixmap(rotated_pixmap)
         self.logo_label.setFixedSize(rotated_pixmap.size())

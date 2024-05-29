@@ -62,7 +62,7 @@ class TestInterface(QWidget):
     def open_general_window(self):
         self.switch_general_window.emit()
     
-        transform = QTransform().rotate(90)
+        transform = QTransform().rotate(180)
         rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
         self.logo_label.setPixmap(rotated_pixmap)
         self.logo_label.setFixedSize(rotated_pixmap.size())

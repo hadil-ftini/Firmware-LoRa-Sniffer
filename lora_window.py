@@ -23,7 +23,7 @@ class LoraValWindow(QMainWindow):
         self.layout.addWidget(self.logo_label)
         self.setGeometry(0, 0, 800, 480)
         # Rotate the pixmap 90 degrees
-        transform = QTransform().rotate(90)
+        transform = QTransform().rotate(180)
         rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
         self.logo_label.setPixmap(rotated_pixmap)
         self.logo_label.setFixedSize(rotated_pixmap.size())

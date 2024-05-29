@@ -18,8 +18,8 @@ class GeneralWindow(QWidget):
         pixmap = QPixmap('enterprise_logo.png')
         self.logo_label.setPixmap(pixmap)
 
-        # Rotate the pixmap 90 degrees
-        transform = QTransform().rotate(90)
+        # Rotate the pixmap 180 degrees
+        transform = QTransform().rotate(180)
         rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
         self.logo_label.setPixmap(rotated_pixmap)
         self.logo_label.setFixedSize(rotated_pixmap.size())
@@ -51,13 +51,15 @@ class GeneralWindow(QWidget):
         rect = self.geometry()
 
         # Create a new geometry with rotated dimensions
-        new_rect = QRect(rect.y(), rect.x(), rect.height(), rect.width())
+        new_rect = QRect(rect.x(), rect.y(), rect.width(), rect.height())
         self.setGeometry(new_rect)
 
         # Rotate and reposition the widgets
         for widget in self.findChildren(QWidget):
             widget_rect = widget.geometry()
-            new_widget_rect = QRect(widget_rect.y(), widget_rect.x(), widget_rect.height(), widget_rect.width())
+            new_x = rect.width() - widget_rect.x() - widget_rect.width()
+            new_y = rect.height() - widget_rect.y() - widget_rect.height()
+            new_widget_rect = QRect(new_x, new_y, widget_rect.width(), widget_rect.height())
             widget.setGeometry(new_widget_rect)
 
         # Adjust main layout to the new geometry
