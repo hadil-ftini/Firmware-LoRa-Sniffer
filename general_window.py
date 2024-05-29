@@ -7,22 +7,24 @@ from lora_window import LoraValWindow
 class GeneralWindow(QWidget):
     def __init__(self, previous_window):
         super().__init__()
+        
+        # Logo
+        self.logo_label = QLabel(self)
+        pixmap = QPixmap('enterprise_logo.png')
+        self.logo_label.setPixmap(pixmap)
+
+        # Transform the logo
         transform = QTransform().rotate(180)
         rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
         self.logo_label.setPixmap(rotated_pixmap)
         self.logo_label.setFixedSize(rotated_pixmap.size())
+
         self.setWindowTitle("General Window")
         self.setGeometry(100, 100, 400, 300)
 
         # Adjusting geometry for a 2.8 inch screen
         self.setGeometry(0, 0, 800, 480)
 
-        # Logo
-        self.logo_label = QLabel(self)
-        pixmap = QPixmap('enterprise_logo.png')
-        self.logo_label.setPixmap(pixmap)
-
-        
         # Return button
         self.return_button = QPushButton("Return", self)
         self.return_button.clicked.connect(self.return_to_previous)
@@ -48,10 +50,6 @@ class GeneralWindow(QWidget):
     def rotate_interface(self):
         # Get the current geometry
         rect = self.geometry()
-
-        # Create a new geometry with rotated dimensions
-        new_rect = QRect(rect.x(), rect.y(), rect.width(), rect.height())
-        self.setGeometry(new_rect)
 
         # Rotate and reposition the widgets
         for widget in self.findChildren(QWidget):
