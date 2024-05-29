@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QMessageBox, QLabel, QHBoxLayout
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QTransform
 from lora_window import LoraValWindow 
 class GeneralWindow(QWidget):
     def __init__(self, previous_window):
@@ -9,7 +9,12 @@ class GeneralWindow(QWidget):
         self.setGeometry(100, 100, 400, 300)
 
         # Adjusting geometry for a 2.8 inch screen
-        self.setGeometry(0, 0, 220, 320)
+        self.setGeometry(0, 0, 800, 480)
+        # Rotate the pixmap 90 degrees
+        transform = QTransform().rotate(90)
+        rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
+        self.logo_label.setPixmap(rotated_pixmap)
+        self.logo_label.setFixedSize(rotated_pixmap.size())
 
         # Logo
         self.logo_label = QLabel(self)

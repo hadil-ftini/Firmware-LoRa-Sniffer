@@ -13,7 +13,9 @@ class TestInterface(QWidget):
         self.setGeometry(100, 100, 400, 300)
 
         # Adjusting geometry for a 2.8 inch screen
-        self.setGeometry(0, 0, 220, 320)
+        self.setGeometry(0, 0, 800, 480)
+        
+
 
 
         # Logo

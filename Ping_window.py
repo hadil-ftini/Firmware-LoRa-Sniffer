@@ -76,8 +76,8 @@ class PingTestWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Ping Pong Test")
-        self.setGeometry(0, 0, 220, 320)
-        self.setMinimumSize(220, 320) 
+        self.setGeometry(0, 0, 800, 480)
+         
         self.setup_ui()
         self.lora = self.setup_lora()
         self.lora.packet_callback = self.update_packet_display
