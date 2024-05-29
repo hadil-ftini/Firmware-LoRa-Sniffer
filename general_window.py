@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QMessageBox, QLabel, QHBoxLayout
 from PyQt5.QtGui import QPixmap, QTransform
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QRect
 from lora_window import LoraValWindow
 
 class GeneralWindow(QWidget):
@@ -15,11 +15,9 @@ class GeneralWindow(QWidget):
 
         # Logo
         self.logo_label = QLabel(self)
-        self.logo_label.setGeometry(52, 10, 120, 120)
-        
-        # Load the pixmap
         pixmap = QPixmap('enterprise_logo.png')
-        
+        self.logo_label.setPixmap(pixmap)
+
         # Rotate the pixmap 90 degrees
         transform = QTransform().rotate(90)
         rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
@@ -45,6 +43,25 @@ class GeneralWindow(QWidget):
         self.setLayout(main_layout)
 
         self.previous_window = previous_window
+
+        self.rotate_interface()
+
+    def rotate_interface(self):
+        # Get the current geometry
+        rect = self.geometry()
+
+        # Create a new geometry with rotated dimensions
+        new_rect = QRect(rect.y(), rect.x(), rect.height(), rect.width())
+        self.setGeometry(new_rect)
+
+        # Rotate and reposition the widgets
+        for widget in self.findChildren(QWidget):
+            widget_rect = widget.geometry()
+            new_widget_rect = QRect(widget_rect.y(), widget_rect.x(), widget_rect.height(), widget_rect.width())
+            widget.setGeometry(new_widget_rect)
+
+        # Adjust main layout to the new geometry
+        self.setLayout(self.layout())
 
     def reset_parameters(self):
         # Implement resetting parameters logic here
