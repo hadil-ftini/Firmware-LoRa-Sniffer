@@ -10,6 +10,10 @@ class TestInterface(QWidget):
 
     def __init__(self, previous_window):
         super().__init__()
+        transform = QTransform().rotate(180)
+        rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
+        self.logo_label.setPixmap(rotated_pixmap)
+        self.logo_label.setFixedSize(rotated_pixmap.size())
         self.setWindowTitle("Setting Test Interface")
         self.setGeometry(100, 100, 400, 300)
 
@@ -62,8 +66,4 @@ class TestInterface(QWidget):
     def open_general_window(self):
         self.switch_general_window.emit()
     
-        transform = QTransform().rotate(180)
-        rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
-        self.logo_label.setPixmap(rotated_pixmap)
-        self.logo_label.setFixedSize(rotated_pixmap.size())
-    
+        
