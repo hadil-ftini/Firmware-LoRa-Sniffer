@@ -77,7 +77,7 @@ class PingTestWindow(QWidget):
     def __init__(self):
         super().__init__()
         transform = QTransform().rotate(180)
-        rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
+        rotated_pixmap = QPixmap.transformed(transform, Qt.SmoothTransformation)
         self.logo_label.setPixmap(rotated_pixmap)
         self.logo_label.setFixedSize(rotated_pixmap.size())
         self.setWindowTitle("Ping Pong Test")
