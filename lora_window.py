@@ -1,16 +1,14 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QPushButton, QMainWindow, QComboBox, QMessageBox
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap,QTransform
+from PyQt5.QtGui import QPixmap, QTransform
 from SX127x.LoRa import *
 from SX127x.board_config import BOARD
+
 class LoraValWindow(QMainWindow):
     def __init__(self, previous_window=None):
         super().__init__()
-        transform = QTransform().rotate(90)
-        rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
-        self.logo_label.setPixmap(rotated_pixmap)
-        self.logo_label.setFixedSize(rotated_pixmap.size())
+        
         self.setWindowTitle("LoRa Setup")
         self.previous_window = previous_window
         self.setup_ui()
@@ -20,18 +18,15 @@ class LoraValWindow(QMainWindow):
         self.setCentralWidget(self.central_widget)
 
         self.layout = QVBoxLayout(self.central_widget)
+
+        # Logo
         self.logo_label = QLabel(self)
-        self.logo_label.setGeometry(52, 40, 120, 120)
-        pixmap = QPixmap('enterprise_logo.png')  
-        self.logo_label.setPixmap(pixmap)
-        self.layout.addWidget(self.logo_label)
-        self.setGeometry(0, 0, 800, 480)
-        # Rotate the pixmap 90 degrees
+        pixmap = QPixmap('enterprise_logo.png')
         transform = QTransform().rotate(180)
         rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
         self.logo_label.setPixmap(rotated_pixmap)
         self.logo_label.setFixedSize(rotated_pixmap.size())
-
+        self.layout.addWidget(self.logo_label)
 
         # QLabel for Frequency
         self.freq_label = QLabel("Frequency (MHz):", self)
@@ -76,6 +71,8 @@ class LoraValWindow(QMainWindow):
         self.save_button = QPushButton("Save", self)
         self.save_button.clicked.connect(self.save_parameters)
         self.layout.addWidget(self.save_button)
+
+        self.setGeometry(0, 0, 800, 480)
 
     def setup_lora(self):
         freq = int(self.freq_input.currentText())
