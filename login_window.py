@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox, QGridLayout, QApplication
 from PyQt5.QtCore import Qt, pyqtSignal, QSettings
-from PyQt5.QtGui import QFont, QPixmap
+from PyQt5.QtGui import QFont, QPixmap, QTransform
 
 class VirtualKeyboard(QWidget):
     key_pressed = pyqtSignal(str)
@@ -38,22 +38,27 @@ class VirtualKeyboard(QWidget):
         button = self.sender()
         text = button.text()
         self.key_pressed.emit(text)
-
+# Rotate the pixmap 90 degrees
+        
 class LoginWindow(QWidget):
     switch_window = pyqtSignal()
 
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Login Page")
-        self.setGeometry(0, 0, 220, 320)  # Adjusting geometry for a 2.8 inch screen
-        self.setMinimumSize(220, 320)
+        self.setGeometry(0, 0, 800, 480)
+       
 
         # Logo
         self.logo_label = QLabel(self)
         self.logo_label.setGeometry(52, 10, 120, 120)
         pixmap = QPixmap('enterprise_logo.png')
         self.logo_label.setPixmap(pixmap)
-
+        # Rotate the pixmap 90 degrees
+        transform = QTransform().rotate(90)
+        rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
+        self.logo_label.setPixmap(rotated_pixmap)
+        self.logo_label.setFixedSize(rotated_pixmap.size())
         self.title_label = QLabel("Irwise Data Logger", self)
         self.title_label.setFont(QFont('Helvetica', 16))
         self.title_label.setAlignment(Qt.AlignCenter)

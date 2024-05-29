@@ -1,6 +1,7 @@
 import sys
 import time
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QLineEdit, QMessageBox
+from PyQt5.QtGui import QTransform,QPixmap
 from PyQt5.QtCore import Qt
 from SX127x.LoRa import *
 from SX127x.board_config import BOARD
@@ -174,7 +175,10 @@ class PingTestWindow(QWidget):
         main_layout.addWidget(self.elapsed_time_label)
         main_layout.addWidget(ping_button)
         main_layout.addWidget(save_button)
-
+        transform = QTransform().rotate(90)
+        rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
+        self.logo_label.setPixmap(rotated_pixmap)
+        self.logo_label.setFixedSize(rotated_pixmap.size())
         self.setLayout(main_layout)
 
     def update_node_id(self):

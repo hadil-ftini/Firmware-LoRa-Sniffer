@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QGridLayout
 from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtGui import QTransform,QPixmap
 from PyQt5.QtGui import QFont, QPixmap
 
 class TestInterface(QWidget):
@@ -15,8 +16,6 @@ class TestInterface(QWidget):
         # Adjusting geometry for a 2.8 inch screen
         self.setGeometry(0, 0, 800, 480)
         
-
-
 
         # Logo
         self.logo_label = QLabel(self)
@@ -62,5 +61,9 @@ class TestInterface(QWidget):
 
     def open_general_window(self):
         self.switch_general_window.emit()
-
+    
+        transform = QTransform().rotate(90)
+        rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
+        self.logo_label.setPixmap(rotated_pixmap)
+        self.logo_label.setFixedSize(rotated_pixmap.size())
     

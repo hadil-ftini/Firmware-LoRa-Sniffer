@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QPushButton, QMainWindow, QComboBox, QMessageBox
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap,QTransform
 from SX127x.LoRa import *
 from SX127x.board_config import BOARD
 class LoraValWindow(QMainWindow):
@@ -21,8 +21,12 @@ class LoraValWindow(QMainWindow):
         pixmap = QPixmap('enterprise_logo.png')  
         self.logo_label.setPixmap(pixmap)
         self.layout.addWidget(self.logo_label)
-        self.setGeometry(0, 0, 220, 320)
-        self.setMinimumSize(220, 320)  
+        self.setGeometry(0, 0, 800, 480)
+        # Rotate the pixmap 90 degrees
+        transform = QTransform().rotate(90)
+        rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
+        self.logo_label.setPixmap(rotated_pixmap)
+        self.logo_label.setFixedSize(rotated_pixmap.size())
 
 
         # QLabel for Frequency
