@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QMessageBox, QLabel, QHBoxLayout
 from PyQt5.QtGui import QPixmap, QTransform
+from PyQt5.QtCore import Qt
 from lora_window import LoraValWindow
 
 class GeneralWindow(QWidget):
