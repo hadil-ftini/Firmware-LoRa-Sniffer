@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox, QGridLayout, QApplication
 from PyQt5.QtCore import Qt, pyqtSignal, QSettings
-from PyQt5.QtGui import QFont, QPixmap, QPainter
+from PyQt5.QtGui import QFont, QPixmap, QTransform
 
 class VirtualKeyboard(QWidget):
     key_pressed = pyqtSignal(str)
@@ -34,16 +34,12 @@ class VirtualKeyboard(QWidget):
 
         self.setLayout(layout)
 
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.translate(self.width() / 2, self.height() / 2)  # Translation au centre du widget
-        painter.rotate(90)  # Rotation de 90 degrés
-
     def buttonClicked(self):
         button = self.sender()
         text = button.text()
         self.key_pressed.emit(text)
-
+# Rotate the pixmap 90 degrees
+        
 class LoginWindow(QWidget):
     switch_window = pyqtSignal()
 
@@ -51,13 +47,14 @@ class LoginWindow(QWidget):
         super().__init__()
         self.setWindowTitle("Login Page")
         self.setGeometry(0, 0, 800, 480)
+       
 
         # Logo
         self.logo_label = QLabel(self)
         self.logo_label.setGeometry(52, 10, 120, 120)
         pixmap = QPixmap('enterprise_logo.png')
         self.logo_label.setPixmap(pixmap)
-
+        
         self.title_label = QLabel("Irwise Data Logger", self)
         self.title_label.setFont(QFont('Helvetica', 16))
         self.title_label.setAlignment(Qt.AlignCenter)
@@ -74,7 +71,9 @@ class LoginWindow(QWidget):
 
         # Virtual keyboard
         self.virtual_keyboard = VirtualKeyboard()
-        self.virtual_keyboard.key_pressed.connect(self.handle_key_pressed)
+
+        # Connect the signal after initializing virtual keyboard
+        self.virtual_keyboard.key_pressed.connect(self.handle_key_pressed1)
 
         # Show virtual keyboard when focused
         self.entry_username.installEventFilter(self)
@@ -109,5 +108,62 @@ class LoginWindow(QWidget):
         username = self.entry_username.text()
         password = self.entry_password.text()
 
-    def handle_key_pressed(self, key):
-        focused_widget = self.focusWidget
+        settings = QSettings('login.ini', QSettings.IniFormat)
+        correct_username = settings.value('Login/username')
+        correct_password = settings.value('Login/password')
+
+        if username == correct_username and password == correct_password:
+            QMessageBox.information(self, "Login Successful", f"Welcome, {username}")
+            self.switch_window.emit()
+        else:
+            QMessageBox.warning(self, "Login Failed", "Invalid username or password")
+
+    def handle_key_pressed1(self, key):
+        focused_widget = self.focusWidget()
+        if isinstance(focused_widget, QLineEdit):
+            if key == 'Back':
+                current_text = focused_widget.text()
+                focused_widget.setText(current_text[:-1])
+            else:
+                focused_widget.insert(key)
+        elif isinstance(focused_widget, QPushButton) and focused_widget.text() == 'Back':
+            if key == 'Back':
+                current_text = focused_widget.text()
+                if current_text:
+                    focused_widget.setText(current_text[:-1])
+        elif isinstance(self.entry_username, QLineEdit):
+            self.entry_username.setFocus()
+            self.entry_username.insert(key)
+    def handle_key_pressed2(self, key):
+        focused_widget = self.focusWidget()
+        if isinstance(focused_widget, QLineEdit):
+            if key == 'Back':
+                current_text = focused_widget.text()
+                focused_widget.setText(current_text[:-1])
+            else:
+                focused_widget.insert(key)
+        elif isinstance(focused_widget, QPushButton) and focused_widget.text() == 'Back':
+            if key == 'Back':
+                current_text = focused_widget.text()
+                if current_text:
+                    focused_widget.setText(current_text[:-1])
+        elif isinstance(self.entry_password, QLineEdit):
+            self.entry_password.setFocus()
+            self.entry_password.insert(key)
+    def eventFilter(self, source, event):
+        if event.type() == event.FocusIn:
+            if source == self.entry_username:
+                self.virtual_keyboard.key_pressed.disconnect()
+                self.virtual_keyboard.key_pressed.connect(self.handle_key_pressed1)
+            elif source == self.entry_password:
+                self.virtual_keyboard.key_pressed.disconnect()
+                self.virtual_keyboard.key_pressed.connect(self.handle_key_pressed2)
+            self.virtual_keyboard.show()
+        return super().eventFilter(source, event)
+
+if __name__ == '__main__':
+    import sys
+    app = QApplication(sys.argv)
+    window = LoginWindow()
+    window.show()
+    sys.exit(app.exec_())
