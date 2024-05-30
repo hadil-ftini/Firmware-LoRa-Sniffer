@@ -57,7 +57,6 @@ class LoginWindow(QWidget):
         self.logo_label.setGeometry(52, 10, 120, 120)
         pixmap = QPixmap('enterprise_logo.png')
         self.logo_label.setPixmap(pixmap)
-   
 
         self.title_label = QLabel("Irwise Data Logger", self)
         self.title_label.setFont(QFont('Helvetica', 16))
@@ -110,3 +109,5 @@ class LoginWindow(QWidget):
         username = self.entry_username.text()
         password = self.entry_password.text()
 
+    def handle_key_pressed(self, key):
+        focused_widget = self.focusWidget
