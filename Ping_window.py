@@ -70,12 +70,14 @@ class MyLoRa(LoRa):
         
 class PingTestWindow(QWidget):
     
-    def __init__(self):
+    class PingTestWindow(QWidget):
+    
+     def __init__(self):
         super().__init__()
         transform = QTransform().rotate(180)
-        # Here, create a QPixmap instance to use transformed method
-        pixmap = QPixmap()  
+        pixmap = QPixmap()  # Create a QPixmap instance
         rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
+        self.logo_label = QLabel()  # Create the QLabel instance
         self.logo_label.setPixmap(rotated_pixmap)
         self.logo_label.setFixedSize(rotated_pixmap.size())
         self.setWindowTitle("Ping Pong Test")
@@ -86,6 +88,7 @@ class PingTestWindow(QWidget):
         self.lora.packet_callback = self.update_packet_display
         self.update_signal_values()  
         self.ping_start_time = None
+
 
     def setup_lora(self):
         BOARD.setup()
