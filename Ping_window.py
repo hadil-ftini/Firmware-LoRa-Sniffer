@@ -1,12 +1,13 @@
 import sys
 import time
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QLineEdit, QMessageBox
-from PyQt5.QtGui import QTransform,QPixmap
+from PyQt5.QtGui import QTransform, QPixmap
 from PyQt5.QtCore import Qt
 from SX127x.LoRa import *
 from SX127x.board_config import BOARD
 
 POLYNOMIAL = 0x07
+
 def start(self):          
         while True:
             while (self.var==0):
@@ -20,20 +21,15 @@ def start(self):
                 self.reset_ptr_rx()
                 self.set_mode(MODE.RXCONT) # Receiver mode
                 time.sleep(10)
-#un algorithme de calcul de CRC: Le CRC est une méthode utilisée pour détecter les erreurs dans les données numériques.
+
 def calculate_crc8(data):
     crc = 0x00
-    #traitement de chaque octet 
     for byte in data:
         crc ^= byte
-        #boucle sur les bits
         for _ in range(8):
-            #verification du poids fort 
             if crc & 0x80:
-                #si 1
                 crc = (crc << 1) ^ POLYNOMIAL
             else:
-                #si 0
                 crc <<= 1
             crc &= 0xFF
     return crc
@@ -47,9 +43,9 @@ def ping_frame(node_id, lora):
     sniffer_addr = 0x00000000
     ping_frame_byte = 0x05
     
-    frame = bytearray()#structure de donnérs intégrée permet de manipuler des séquences de bytes
+    frame = bytearray()
     frame.append(payload)
-    frame.extend(sniffer_addr.to_bytes(4, byteorder='big'))#Cette méthode convertit l'entier sniffer_addr en une séquence de 4 octets
+    frame.extend(sniffer_addr.to_bytes(4, byteorder='big'))
     frame.extend(int(node_id, 16).to_bytes(4, byteorder='big'))
     frame.append(ping_frame_byte)
 
@@ -77,7 +73,9 @@ class PingTestWindow(QWidget):
     def __init__(self):
         super().__init__()
         transform = QTransform().rotate(180)
-        rotated_pixmap = QPixmap.transformed(transform, Qt.SmoothTransformation)
+        # Here, create a QPixmap instance to use transformed method
+        pixmap = QPixmap()  
+        rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
         self.logo_label.setPixmap(rotated_pixmap)
         self.logo_label.setFixedSize(rotated_pixmap.size())
         self.setWindowTitle("Ping Pong Test")
@@ -86,7 +84,7 @@ class PingTestWindow(QWidget):
         self.setup_ui()
         self.lora = self.setup_lora()
         self.lora.packet_callback = self.update_packet_display
-        self.update_signal_values()  # Update signal values when window is initialized
+        self.update_signal_values()  
         self.ping_start_time = None
 
     def setup_lora(self):
@@ -102,11 +100,9 @@ class PingTestWindow(QWidget):
         return lora
 
     def setup_ui(self):
-        # Title Label
         self.title_label = QLabel("Node ID (HEX) ", self)
         self.title_label.setAlignment(Qt.AlignCenter)
 
-        # Layout for increment/decrement buttons
         button_layout_top = QHBoxLayout()
         for i in range(8):
             increment_button = QPushButton('▲')
@@ -114,7 +110,6 @@ class PingTestWindow(QWidget):
             increment_button.setFixedSize(15, 15)
             button_layout_top.addWidget(increment_button)
        
-        # Layout for hexadecimal input fields
         hex_input_layout = QHBoxLayout()
         self.hex_inputs = []
         for _ in range(8):
@@ -125,7 +120,6 @@ class PingTestWindow(QWidget):
             hex_input_layout.addWidget(hex_input)
             self.hex_inputs.append(hex_input)
 
-        # Layout for increment/decrement buttons
         button_layout_bottom = QHBoxLayout()
         for i in range(8):
             decrement_button = QPushButton('▼')
@@ -133,47 +127,38 @@ class PingTestWindow(QWidget):
             decrement_button.setFixedSize(15, 15)
             button_layout_bottom.addWidget(decrement_button)
 
-        # Signal layout
         signal_layout = QHBoxLayout()
 
-        # RSSI label and value
         self.rssi_label = QLabel("RSSI:")
         self.rssi_value_label = QLabel("")  
 
-        # SNR label and value
         self.snr_label = QLabel("SNR:")
         self.snr_value_label = QLabel("")
 
-        # Add labels and values to signal layout
         signal_layout.addWidget(self.rssi_label)
         signal_layout.addWidget(self.rssi_value_label)
         signal_layout.addWidget(self.snr_label)
         signal_layout.addWidget(self.snr_value_label)
 
-        # Additional label to display LoRa frame
         self.lora_frame_label = QLabel("Packet RX(hex):")
         self.read_payload_value = QLabel("")
         signal_layout.addWidget(self.read_payload_value)
 
-        # Time elapsed label
         self.time_label = QLabel("Rx Time (ms): ")
         self.elapsed_time_label = QLabel("")
 
-        # Ping Button
         ping_button = QPushButton("PING")
         ping_button.clicked.connect(self.start_ping)
 
-        # Save Button
         save_button = QPushButton("Save")
         save_button.clicked.connect(self.save_parameters)
 
-        # Main layout for all widgets
         main_layout = QVBoxLayout()
         main_layout.addWidget(self.title_label)
         main_layout.addLayout(button_layout_top)
         main_layout.addLayout(hex_input_layout)
         main_layout.addLayout(button_layout_bottom)
-        main_layout.addLayout(signal_layout)  # Add signal layout here
+        main_layout.addLayout(signal_layout)
         main_layout.addWidget(self.lora_frame_label)
         main_layout.addWidget(self.time_label)
         main_layout.addWidget(self.elapsed_time_label)
@@ -196,6 +181,7 @@ class PingTestWindow(QWidget):
         new_value = (current_value - 1) % 16
         self.hex_inputs[index].setText(hex(new_value)[2:].upper())
 
+    
     def start_ping(self):
         self.ping_start_time = time.time()  # Record the time when PING button is clicked
         self.ping()
