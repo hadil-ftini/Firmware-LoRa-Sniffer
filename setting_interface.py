@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QGridLayout
+from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QGridLayout,QHBoxLayout
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QTransform, QPixmap, QFont
 
@@ -9,7 +9,8 @@ class TestInterface(QWidget):
 
     def __init__(self, previous_window):
         super().__init__()
-
+        hbox = QHBoxLayout()
+        self.setLayout(hbox)
         self.setWindowTitle("Setting Test Interface")
         self.setGeometry(100, 100, 400, 300)
         # Adjusting geometry for a 2.8 inch screen

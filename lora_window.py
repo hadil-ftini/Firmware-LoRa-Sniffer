@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QPushButton, QMainWindow, QComboBox, QMessageBox
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QPushButton, QMainWindow, QComboBox, QMessageBox,QHBoxLayout
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QTransform
 from SX127x.LoRa import *
@@ -8,7 +8,8 @@ from SX127x.board_config import BOARD
 class LoraValWindow(QMainWindow):
     def __init__(self, previous_window=None):
         super().__init__()
-        
+        hbox = QHBoxLayout()
+        self.setLayout(hbox)
         self.setWindowTitle("LoRa Setup")
         self.previous_window = previous_window
         self.setup_ui()

@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox, QGridLayout, QApplication
+from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox, QGridLayout, QApplication,QHBoxLayout
 from PyQt5.QtCore import Qt, pyqtSignal, QSettings
 from PyQt5.QtGui import QFont, QPixmap, QTransform
 
@@ -45,6 +45,8 @@ class LoginWindow(QWidget):
 
     def __init__(self):
         super().__init__()
+        hbox = QHBoxLayout()
+        self.setLayout(hbox)
         self.setWindowTitle("Login Page")
         self.setGeometry(0, 0, 800, 480)
        
