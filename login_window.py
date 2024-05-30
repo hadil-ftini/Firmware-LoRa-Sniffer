@@ -24,12 +24,12 @@ class VirtualKeyboard(QWidget):
         for text, row, col in buttons:
             button = QPushButton(text)
             button.clicked.connect(self.buttonClicked)
-            button.setFixedSize(40, 40)  # Adjust the button size as necessary
+            button.setFixedSize(80, 80)  # Adjust the button size as necessary
             layout.addWidget(button, row, col)
 
         back_button = QPushButton('Back')
         back_button.clicked.connect(self.buttonClicked)
-        back_button.setFixedSize(60, 40)  # Set a different size for the "Back" button
+        back_button.setFixedSize(100, 80)  # Set a different size for the "Back" button
         layout.addWidget(back_button, 2, 7, 1, 2)  # Span across multiple columns
 
         self.setLayout(layout)
