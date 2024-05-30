@@ -62,8 +62,8 @@ class MyLoRa(LoRa):
     def __init__(self, parameters, packet_callback):
         super(MyLoRa, self).__init__(parameters)
         self.packet_callback = packet_callback
-        hbox = QHBoxLayout()
-        self.setLayout(hbox)
+        vbox = QVBoxLayout()
+        self.setLayout(vbox)
     def on_rx_done(self):
         payload = self.read_payload(nocheck=True)
         packet_hex = bytes(payload).hex()

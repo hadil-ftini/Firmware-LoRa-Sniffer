@@ -45,8 +45,8 @@ class LoginWindow(QWidget):
 
     def __init__(self):
         super().__init__()
-        hbox = QHBoxLayout()
-        self.setLayout(hbox)
+        vbox = QVBoxLayout()
+        self.setLayout(vbox)
         self.setWindowTitle("Login Page")
         self.setGeometry(0, 0, 800, 480)
        
