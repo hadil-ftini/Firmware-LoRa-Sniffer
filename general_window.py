@@ -14,12 +14,8 @@ class GeneralWindow(QWidget):
         pixmap = QPixmap('enterprise_logo.png')
         self.logo_label.setPixmap(pixmap)
 
-        # Transform the logo
-        transform = QTransform().rotate(180)
-        rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
-        self.logo_label.setPixmap(rotated_pixmap)
-        self.logo_label.setFixedSize(rotated_pixmap.size())
-
+        
+        
         self.setWindowTitle("General Window")
         self.setGeometry(100, 100, 400, 300)
 

@@ -14,11 +14,7 @@ class TestInterface(QWidget):
         self.setGeometry(100, 100, 400, 300)
         # Adjusting geometry for a 2.8 inch screen
         self.setGeometry(0, 0, 800, 480)
-        transform = QTransform().rotate(90)
-        rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
-        self.logo_label.setPixmap(rotated_pixmap)
-        self.logo_label.setFixedSize(rotated_pixmap.size())
-        # Logo
+       
         self.logo_label = QLabel(self)
         pixmap = QPixmap('enterprise_logo.png')
         

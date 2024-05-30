@@ -8,7 +8,7 @@ from SX127x.board_config import BOARD
 class LoraValWindow(QMainWindow):
     def __init__(self, previous_window=None):
         super().__init__()
-        self.rotate(90)
+        
         self.setWindowTitle("LoRa Setup")
         self.previous_window = previous_window
         self.setup_ui()
@@ -22,10 +22,7 @@ class LoraValWindow(QMainWindow):
         # Logo
         self.logo_label = QLabel(self)
         pixmap = QPixmap('enterprise_logo.png')
-        transform = QTransform().rotate(180)
-        rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
-        self.logo_label.setPixmap(rotated_pixmap)
-        self.logo_label.setFixedSize(rotated_pixmap.size())
+       
         self.layout.addWidget(self.logo_label)
 
         # QLabel for Frequency
