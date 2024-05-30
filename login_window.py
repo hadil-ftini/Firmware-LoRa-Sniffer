@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox, QGridLayout, QApplication
 from PyQt5.QtCore import Qt, pyqtSignal, QSettings
 from PyQt5.QtGui import QFont, QPixmap, QTransform
+from PyQt5.QtCore import Qt, QRectF
+from PyQt5.QtGui import QPainter, QTransform
 
 class VirtualKeyboard(QWidget):
     key_pressed = pyqtSignal(str)
@@ -8,6 +10,8 @@ class VirtualKeyboard(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
+        self.setRotation(90)
+
 
     def initUI(self):
         layout = QGridLayout()
@@ -59,6 +63,7 @@ class LoginWindow(QWidget):
         rotated_pixmap = pixmap.transformed(transform, Qt.SmoothTransformation)
         self.logo_label.setPixmap(rotated_pixmap)
         self.logo_label.setFixedSize(rotated_pixmap.size())
+
         self.title_label = QLabel("Irwise Data Logger", self)
         self.title_label.setFont(QFont('Helvetica', 16))
         self.title_label.setAlignment(Qt.AlignCenter)
