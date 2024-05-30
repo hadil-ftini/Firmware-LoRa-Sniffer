@@ -1,4 +1,5 @@
 import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout
 from PyQt5.QtWidgets import QApplication
 from login_window import LoginWindow  
 from setting_interface import TestInterface
@@ -8,6 +9,8 @@ from Ping_window import PingTestWindow
 
 class Controller:
     def __init__(self):
+        hbox = QHBoxLayout()
+        self.setLayout(hbox)
         self.login_window = LoginWindow()
         self.setting_interface = TestInterface(self.login_window)
         self.lora_window = LoraValWindow(self.setting_interface)
