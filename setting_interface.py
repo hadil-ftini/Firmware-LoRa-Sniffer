@@ -9,8 +9,7 @@ class TestInterface(QWidget):
 
     def __init__(self, previous_window):
         super().__init__()
-        vbox = QVBoxLayout()
-        self.setLayout(vbox)
+        self.rotate(90)
         self.setWindowTitle("Setting Test Interface")
         self.setGeometry(100, 100, 400, 300)
         # Adjusting geometry for a 2.8 inch screen

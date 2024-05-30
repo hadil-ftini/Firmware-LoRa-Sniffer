@@ -8,8 +8,7 @@ from SX127x.board_config import BOARD
 class LoraValWindow(QMainWindow):
     def __init__(self, previous_window=None):
         super().__init__()
-        vbox = QVBoxLayout()
-        self.setLayout(vbox)
+        self.rotate(90)
         self.setWindowTitle("LoRa Setup")
         self.previous_window = previous_window
         self.setup_ui()

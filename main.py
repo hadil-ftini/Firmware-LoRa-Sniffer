@@ -9,8 +9,7 @@ from Ping_window import PingTestWindow
 
 class Controller:
     def __init__(self):
-        vbox = QVBoxLayout()
-        self.setLayout(vbox)
+        self.rotate(90)
         self.login_window = LoginWindow()
         self.setting_interface = TestInterface(self.login_window)
         self.lora_window = LoraValWindow(self.setting_interface)

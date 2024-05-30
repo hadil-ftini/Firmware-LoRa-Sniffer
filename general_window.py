@@ -7,8 +7,7 @@ from lora_window import LoraValWindow
 class GeneralWindow(QWidget):
     def __init__(self, previous_window):
         super().__init__()
-        vbox = QVBoxLayout()
-        self.setLayout(vbox)
+        self.rotate(90)
         
         # Logo
         self.logo_label = QLabel(self)
