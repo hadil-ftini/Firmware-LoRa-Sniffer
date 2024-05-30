@@ -43,7 +43,10 @@ class VirtualKeyboard(QWidget):
         text = button.text()
         self.key_pressed.emit(text)
 # Rotate the pixmap 90 degrees
-        
+        def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.translate(self.width() / 2, self.height() / 2)  # Translation au centre du widget
+        painter.rotate(90)
 class LoginWindow(QWidget):
     switch_window = pyqtSignal()
 
