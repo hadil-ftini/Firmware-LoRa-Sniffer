@@ -54,7 +54,7 @@ class LoginWindow(QWidget):
         self.logo_label.setGeometry(52, 10, 120, 120)
         pixmap = QPixmap('enterprise_logo.png')
         self.logo_label.setPixmap(pixmap)
-        
+
         self.title_label = QLabel("Irwise Data Logger", self)
         self.title_label.setFont(QFont('Helvetica', 16))
         self.title_label.setAlignment(Qt.AlignCenter)
